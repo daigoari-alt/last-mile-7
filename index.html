@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10231d">
+  <title>LAST MILE // 7｜軽貨物経営カードゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="road-line" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">L7</span>
+      <div><p>LIGHT CARGO BUSINESS CARD GAME</p><h1>LAST MILE <i>// 7</i></h1></div>
+    </div>
+    <button id="resetButton" class="ghost-button" type="button">最初から</button>
+  </header>
+
+  <main class="game-shell">
+    <section class="day-hero" aria-labelledby="dayTitle">
+      <div>
+        <p class="eyebrow">7 DAYS CHALLENGE</p>
+        <h2 id="dayTitle"><span id="dayNumber">1</span><small>日目 / 7日</small></h2>
+        <p id="dayMessage">配られた手札から、今日の一手を選ぼう。</p>
+      </div>
+      <div class="month-progress" aria-label="週間進捗">
+        <div class="progress-meta"><span>7日間の進捗</span><strong id="progressText">0%</strong></div>
+        <div class="progress-track"><span id="progressBar"></span></div>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="経営状況">
+      <article class="money-card main-stat">
+        <span>所持金</span><strong id="cash">¥100,000</strong><small id="cashDelta">開業資金</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-heading"><span>体力</span><strong id="stamina">100</strong></div>
+        <div class="meter"><span id="staminaBar"></span></div><small id="staminaStatus">絶好調</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-heading"><span>信用</span><strong id="credit">30</strong></div>
+        <div class="meter"><span id="creditBar"></span></div><small id="creditStatus">駆け出し</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-heading"><span>車両</span><strong id="vehicle">80</strong></div>
+        <div class="meter"><span id="vehicleBar"></span></div><small id="vehicleStatus">快調</small>
+      </article>
+    </section>
+
+    <div class="content-grid">
+      <section class="jobs-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">TODAY'S HAND</p><h2>今日の手札を選ぶ</h2></div>
+          <div class="choice-actions"><button id="openShop" class="shop-button" type="button">SHOP</button><span id="choiceNote" class="choice-note">3枚から1枚</span></div>
+        </div>
+        <div id="resultBanner" class="result-banner" aria-live="polite">
+          <span class="result-banner-icon">🃏</span>
+          <div><strong>カードを1枚選んでください</strong><p>仕事、休養、整備。今日の一手が月末の結果を変えます。</p></div>
+        </div>
+        <div id="supportZone" class="support-zone" aria-label="今日のサポートカード"></div>
+        <div id="jobList" class="job-list"></div>
+        <p class="hint">手札は毎日入れ替わります。選ばなかったカードは次の日に残りません。</p>
+      </section>
+
+      <aside class="side-panel">
+        <section class="fixed-costs">
+          <div class="section-heading compact"><div><p class="eyebrow">WEEK END</p><h2>7日目の経費</h2></div><strong>¥55,000</strong></div>
+          <dl><div><dt>生活費</dt><dd>¥50,000</dd></div><div><dt>保険</dt><dd>¥2,000</dd></div><div><dt>通信費</dt><dd>¥3,000</dd></div></dl>
+        </section>
+        <section class="log-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">DRIVER'S LOG</p><h2>ゲームログ</h2></div><span id="logCount">0件</span></div>
+          <ol id="gameLog" class="game-log" aria-live="polite"></ol>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="shopDialog" class="shop-dialog">
+    <div class="shop-window">
+      <button id="closeShop" class="dialog-close" aria-label="ショップを閉じる">×</button>
+      <p class="eyebrow">SUPPORT CARD SHOP</p>
+      <h2>ドライバーズショップ</h2>
+      <p class="shop-lead">購入したカードは在庫に追加され、案件を選ぶ前に使えます。</p>
+      <div id="shopItems" class="shop-items"></div>
+      <div class="shop-wallet">所持金 <strong id="shopCash">¥0</strong></div>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog" class="result-dialog">
+    <div class="result-card">
+      <button id="closeResult" class="dialog-close" aria-label="結果を閉じる">×</button>
+      <p class="eyebrow">7 DAYS REPORT</p>
+      <div id="titleCard" class="title-card" data-level="1">
+        <div class="title-card-top"><span id="titleRarity">COMMON</span><strong><b id="rankBadge">1</b> / 10</strong></div>
+        <div class="title-card-art">🚐<span>✦</span></div>
+        <p>DRIVER TITLE</p>
+        <h2 id="driverTitle">見習いドライバー</h2>
+        <div class="title-card-score">総合評価 <strong id="totalScore">0</strong></div>
+      </div>
+      <h2 id="resultTitle">あなたの称号が決まりました</h2>
+      <p id="resultComment" class="result-comment"></p>
+      <div class="report-grid">
+        <div><span>7日間の売上</span><strong id="reportSales"></strong></div>
+        <div><span>経費</span><strong id="reportExpenses"></strong></div>
+        <div class="profit"><span>7日間の利益</span><strong id="reportProfit"></strong></div>
+        <div><span>最終所持金</span><strong id="reportCash"></strong></div>
+      </div>
+      <div class="final-stats" id="finalStats"></div>
+      <button id="playAgain" class="primary-button" type="button">もう一度挑戦する</button>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
