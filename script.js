@@ -155,6 +155,7 @@ function finishMonth(){
   ];
   const level=clamp(Math.floor(score/10)+1,1,10);
   const title=titles[level-1];
+  state.finalTitle=title.name; state.finalRarity=title.rarity; state.finalProfit=profit;
   $('rankBadge').textContent=level; $('driverTitle').textContent=title.name; $('titleRarity').textContent=title.rarity; $('totalScore').textContent=Math.round(score); $('titleCard').dataset.level=level;
   $('resultTitle').textContent='あなたの称号が決まりました'; $('resultComment').textContent=title.comment;
   $('reportSales').textContent=yen(state.sales); $('reportExpenses').textContent=yen(state.expenses); $('reportProfit').textContent=yen(profit); $('reportCash').textContent=yen(state.cash);
@@ -179,7 +180,15 @@ function updateUI(delta=0){
   document.querySelector('.main-stat').classList.remove('flash'); requestAnimationFrame(()=>document.querySelector('.main-stat').classList.add('flash'));
 }
 function resetGame(){ state=initialState(); currentHand=drawHand(); $('resultBanner').className='result-banner'; $('resultBanner').innerHTML='<span class="result-banner-icon">🃏</span><div><strong>カードを1枚選んでください</strong><p>仕事、休養、整備。今日の一手が月末の結果を変えます。</p></div>'; $('resultDialog').close(); if($('shopDialog').open)$('shopDialog').close(); updateUI(); }
+function shareResultToX(){
+  if(!state.finished||!state.finalTitle) return;
+  const text=`【LAST MILE // 7】\n7日間の称号は「${state.finalTitle}」［${state.finalRarity}］\n売上 ${yen(state.sales)}｜利益 ${yen(state.finalProfit)}\nあなたも軽貨物経営に挑戦！\n\n#LASTMILE7 #軽貨物経営ゲーム`;
+  const params=new URLSearchParams({text});
+  if(location.protocol==='https:'||location.protocol==='http:') params.set('url',location.href.split('#')[0].split('?')[0]);
+  window.open(`https://x.com/intent/post?${params.toString()}`,'_blank','noopener,noreferrer,width=720,height=640');
+}
 $('resetButton').addEventListener('click',()=>{ if(confirm('現在の記録を消して最初から始めますか？')) resetGame(); });
 $('playAgain').addEventListener('click',resetGame); $('closeResult').addEventListener('click',()=>$('resultDialog').close());
+$('shareX').addEventListener('click',shareResultToX);
 $('openShop').addEventListener('click',()=>{ renderShop(); $('shopDialog').showModal(); }); $('closeShop').addEventListener('click',()=>$('shopDialog').close());
 updateUI();
